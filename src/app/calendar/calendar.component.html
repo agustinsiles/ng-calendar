@@ -1,0 +1,25 @@
+<div class="calendar-container">
+    <header class="calendar-header">
+        <div class="calendar-header-day">Sunday</div>
+        <div class="calendar-header-day">Monday</div>
+        <div class="calendar-header-day">Tuesday</div>
+        <div class="calendar-header-day">Wednesday</div>
+        <div class="calendar-header-day">Thursday</div>
+        <div class="calendar-header-day">Friday</div>
+        <div class="calendar-header-day">Saturday</div>
+    </header>
+    <div class="calendar-dates-container">
+        <div
+            class="calendar-week" 
+            *ngFor="let week of calendarGrid; let i = index">
+            <div
+                class="calendar-day" 
+                [ngClass]="{
+                    'past-month-date': !day.fromCurrentMonth,
+                    'weekend-date': day.day === 0 || day.day === 6
+                }"
+                *ngFor="let day of week">{{ day.date }}
+            </div>
+        </div>
+    </div>
+</div>
