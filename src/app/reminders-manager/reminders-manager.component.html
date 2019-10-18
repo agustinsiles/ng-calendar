@@ -1,0 +1,41 @@
+<form 
+    novalidate 
+    (ngSubmit)="onSubmit()" 
+    [formGroup]="reminderForm">
+
+    Reminder: <input formControlName="text">
+    <div
+        class="error" 
+        *ngIf="reminderForm.get('text').touched">
+        <span *ngIf="reminderForm.get('text').hasError('required')">The text of the reminder is required.</span>
+        <span *ngIf="reminderForm.get('text').hasError('maxLength')">The value exeeds the maximum amount of characters (30).</span>
+    </div>
+  
+    Location: <input formControlName="city">
+    <div
+        class="error"
+        *ngIf="reminderForm.get('city').touched && reminderForm.get('city').hasError('required')">
+        The city is required
+    </div>
+
+    Time: <input formControlName="time" type="time">
+    <div
+        class="error"
+        *ngIf="reminderForm.get('time').touched && reminderForm.get('time').hasError('required')">
+        The time is required
+    </div>
+
+    Color:
+    <select 
+        formControlName="color" 
+        type="color">
+        <option value="red">Red</option> 
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+    </select>
+
+    <button 
+        type="submit" 
+        [disabled]="reminderForm.invalid">Add reminder
+    </button>
+</form>

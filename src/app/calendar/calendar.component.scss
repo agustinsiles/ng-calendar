@@ -29,6 +29,13 @@ $past-month: #a6a6a6;
             padding: 5px;
             width: 145px;
 
+            ul {
+                padding: 0;
+                margin: 10px 0;
+                font-size: 12px;
+                list-style: none;
+            }
+
             &.past-month-date { color: $past-month!important; }
             &.weekend-date { 
                 background-color: #f2f2f2; 

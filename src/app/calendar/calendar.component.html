@@ -14,12 +14,27 @@
             *ngFor="let week of calendarGrid; let i = index">
             <div
                 class="calendar-day" 
+                (click)="showReminderForm(i, x)"
+                *ngFor="let day of week; let x = index"
                 [ngClass]="{
                     'past-month-date': !day.fromCurrentMonth,
                     'weekend-date': day.day === 0 || day.day === 6
-                }"
-                *ngFor="let day of week">{{ day.date }}
+                }">{{ day.date }}
+
+                <ul *ngIf="day.reminders.length">
+                    <li 
+                        *ngFor="let reminder of day.reminders; let r = index" 
+                        (click)="$event.stopPropagation();showReminderForm(i, x, r)"
+                        [ngStyle]="{ 'background-color': reminder.color || 'white' }">{{ reminder.time }} {{ reminder.text }} @ {{ reminder.city }}
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
+
+    <reminders-manager
+        *ngIf="showAddReminder"
+        [selectedReminder]="selectedReminder"
+        (onReminderSave)="saveReminder($event)">
+    </reminders-manager>
 </div>

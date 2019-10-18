@@ -1,4 +1,4 @@
-export default interface CalendarDay {
+export default interface CalendarDayInterface {
     day: number,
     date: number,
     month: number,

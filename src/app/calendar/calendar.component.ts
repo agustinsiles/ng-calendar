@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import CalendarDay from 'src/shared/interfaces/CalendarDay';
+import CalendarDay from 'src/shared/classes/Day';
 
 @Component({
     selector: 'my-calendar',
@@ -10,8 +10,11 @@ export class CalendarComponent {
     calendarGrid: any[] = [];
     calendarRow: CalendarDay[] = [];
     daysInMonth: number;
+    selectedDate: number[];
+    selectedReminder: any;
+    showAddReminder: boolean = false;
 
-    ngOnInit() {
+    ngOnInit(): void {
         const today: Date = new Date();
         const currentYear: number = today.getFullYear();
         const currentMonth: number = today.getMonth();
@@ -27,34 +30,34 @@ export class CalendarComponent {
             const daysFromPreviousMonth: CalendarDay[] = [];
             for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
                 const day = new Date(previousMonthYear, previousMonthNumber, previousMonthDaysQty - i);
-                daysFromPreviousMonth.push({
+                daysFromPreviousMonth.push(new CalendarDay({
                     day: day.getDay(),
                     date: day.getDate(),
                     month: day.getMonth(),
                     year: day.getFullYear(),
                     fromCurrentMonth: false
-                });
+                }));
             }
             this.calendarRow.push(...daysFromPreviousMonth.reverse());
         }
 
-        this.calendarRow.push({
+        this.calendarRow.push(new CalendarDay({
             day: firstDayOfMonth.getDay(),
             date: firstDayOfMonth.getDate(),
             month: firstDayOfMonth.getMonth(),
             year: firstDayOfMonth.getFullYear(),
             fromCurrentMonth: true
-        });
+        }));
 
         for (let i = firstDayOfMonth.getDate() + 1; i <= daysInMonth; i++) {
             const day = new Date(currentYear, currentMonth, i);
-            this.calendarRow.push({
+            this.calendarRow.push(new CalendarDay({
                 day: day.getDay(),
                 date: day.getDate(),
                 month: day.getMonth(),
                 year: day.getFullYear(),
                 fromCurrentMonth: true
-            });
+            }));
         }
 
         if (lastDayInMonth.getDay() < 6) {
@@ -65,17 +68,45 @@ export class CalendarComponent {
 
             for (let i = 1; i <= remainingDaysInRow; i++) {
                 const day: Date = new Date(nextMonthYear, nextMonthNumber, i);
-                this.calendarRow.push({
+                this.calendarRow.push(new CalendarDay({
                     day: day.getDay(),
                     date: day.getDate(),
                     month: day.getMonth(),
                     year: day.getFullYear(),
                     fromCurrentMonth: false
-                });
+                }));
             }
         }
 
         do  this.calendarGrid.push(this.calendarRow.splice(0, 7));    
         while (this.calendarRow.length);        
+    }
+
+    showReminderForm(week: number, day: number, reminder = null): void {
+        if (reminder !== null) {
+            const selectedReminder = this.calendarGrid[week][day].reminders[reminder];
+            this.selectedReminder = {
+                ...selectedReminder,
+                index: reminder
+            };
+        }
+
+        this.showAddReminder = true;
+        this.selectedDate = [week, day];
+    }
+
+    saveReminder(evt: any): void {
+        const { text, city, time, color } = evt;
+        const [ week, day ] = this.selectedDate;
+        const reminder = { text, city, time, color };
+
+        if (this.selectedReminder) {
+            this.calendarGrid[week][day].reminders[this.selectedReminder.index] = reminder;
+        } else {
+            this.calendarGrid[week][day].addReminder(reminder);
+        }
+
+        this.showAddReminder = false;
+        this.selectedReminder = null;
     }
 }
