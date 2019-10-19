@@ -154,8 +154,6 @@ export class CalendarComponent {
                     date.addReminder(reminder);
                 }
 
-                date.reminders = _.sortyBy(date.reminders, 'time').reverse();
-
                 this.showAddReminder = false;
                 this.selectedReminder = null;
                 this._cd.detectChanges();
