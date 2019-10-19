@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { Component, ChangeDetectorRef } from '@angular/core';
 import CalendarDay from 'src/shared/classes/Day';
 import Reminder from 'src/shared/classes/Reminder';
