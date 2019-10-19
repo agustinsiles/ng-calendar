@@ -26,12 +26,32 @@
                     <li 
                         *ngFor="let reminder of day.reminders; let r = index" 
                         (click)="$event.stopPropagation();showReminderForm(i, x, r)"
-                        [ngStyle]="{ 'background-color': reminder.color || 'white' }">{{ reminder.time }} {{ reminder.text }} @ {{ reminder.city }}. <i>{{ reminder.weather }}</i>
+                        [ngStyle]="{ 'background-color': reminder.color || 'white' }">{{ reminder.time }} {{ reminder.text }}
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+    <div class="reminders-list">
+        <div *ngFor="let week of calendarGrid">
+            <div *ngFor="let day of week">
+                <div *ngIf="day.reminders.length">
+                    Reminders for {{ day.month + '/' + day.date }}
+                    <ul>
+                        <li 
+                            *ngFor="let reminder of day.reminders; let r = index" 
+                            [ngStyle]="{ 'background-color': reminder.color || 'white' }">
+                            {{ reminder.time }} {{ reminder.text }} @ {{ reminder.city }}. <i>{{ reminder.weather }}</i> - 
+                            <span (click)="day.reminders.splice(r, 1)"><b>DELETE REMINDER</b></span>
+                        </li>
+                    </ul>
+                    <span classs="danger" (click)="day.reminders = []">DELETE ALL DAY'S REMINDERS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="clear: both"></div>
 
     <reminders-manager
         *ngIf="showAddReminder"

@@ -1,7 +1,11 @@
 $primary: #2F74B8;
 $secondary: gray;
 $past-month: #a6a6a6;
+.reminders-list {
+    float: left;
+}
 .calendar-container {
+    .calendar-dates-container { float: left; }
     .calendar-dates-container,
     .calendar-week,
     .calendar-header {

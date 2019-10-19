@@ -6,9 +6,9 @@
 
         <div>
             <label for="text">
-                Reminder: <input id="text" formControlName="text">
+                Reminder: <input autofocus id="text" formControlName="text">
                 <span
-                    class="error" 
+                    class="danger" 
                     *ngIf="reminderForm.get('text').touched">
                     <span *ngIf="reminderForm.get('text').hasError('required')">The text of the reminder is required.</span>
                     <span *ngIf="reminderForm.get('text').hasError('maxLength')">The value exeeds the maximum amount of characters (30).</span>
@@ -20,7 +20,7 @@
             <label for="city">
                 City: <input id="city" formControlName="city">
                 <span
-                    class="error"
+                    class="danger"
                     *ngIf="reminderForm.get('city').touched && reminderForm.get('city').hasError('required')">
                     The city is required
                 </span>
@@ -31,7 +31,7 @@
             <label for="time">
                 Time: <input id="time" formControlName="time" type="time">
                 <span
-                    class="error"
+                    class="danger"
                     *ngIf="reminderForm.get('time').touched && reminderForm.get('time').hasError('required')">
                     The time is required
                 </span>
