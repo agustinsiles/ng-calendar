@@ -1,10 +1,11 @@
 import CalendarDayInterface from './../interfaces/CalendarDay';
+import Reminder from './Reminder';
 export default class CalendarDay {
     day: number;
     month: number;
     year: number;
     date: number;
-    reminders: any[];
+    reminders: Reminder[];
     fromCurrentMonth: boolean;
 
     constructor(day: CalendarDayInterface) {

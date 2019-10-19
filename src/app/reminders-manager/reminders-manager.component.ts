@@ -13,7 +13,7 @@ export class RemindersManagerComponent {
     
     constructor(private fb: FormBuilder) {}
 
-    ngOnInit(): void {
+    ngOnChanges(): void {
         this.reminderForm = this.fb.group({
             color: [this.selectedReminder && this.selectedReminder.color],
             city: [this.selectedReminder && this.selectedReminder.city, Validators.required],

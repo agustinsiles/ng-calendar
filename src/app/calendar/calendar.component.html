@@ -26,7 +26,7 @@
                     <li 
                         *ngFor="let reminder of day.reminders; let r = index" 
                         (click)="$event.stopPropagation();showReminderForm(i, x, r)"
-                        [ngStyle]="{ 'background-color': reminder.color || 'white' }">{{ reminder.time }} {{ reminder.text }} @ {{ reminder.city }}
+                        [ngStyle]="{ 'background-color': reminder.color || 'white' }">{{ reminder.time }} {{ reminder.text }} @ {{ reminder.city }}. <i>{{ reminder.weather }}</i>
                     </li>
                 </ul>
             </div>

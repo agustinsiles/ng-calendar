@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
+import * as _ from 'lodash';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import CalendarDay from 'src/shared/classes/Day';
-
+import Reminder from 'src/shared/classes/Reminder';
+import { WeatherService } from '../weather.service';
+import { throwError } from 'rxjs';
+import { catchError, take, finalize } from 'rxjs/operators';
+import { NgBlockUI, BlockUI } from 'ng-block-ui';
 @Component({
     selector: 'my-calendar',
     templateUrl: './calendar.component.html',
     styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
+    @BlockUI() blockUI: NgBlockUI;
     calendarGrid: any[] = [];
     calendarRow: CalendarDay[] = [];
     currentMonth: number = new Date().getMonth();
@@ -28,6 +34,11 @@ export class CalendarComponent {
     selectedDate: number[];
     selectedReminder: any;
     showAddReminder: boolean = false;
+
+    constructor(
+        private _weatherService: WeatherService, 
+        private _cd: ChangeDetectorRef
+    ) {}
 
     ngOnInit(): void {
         const today: Date = new Date();
@@ -98,6 +109,9 @@ export class CalendarComponent {
     }
 
     showReminderForm(week: number, day: number, reminder = null): void {
+        this.selectedReminder = null;
+        this.showAddReminder = false;
+        this._cd.detectChanges();
         if (reminder !== null) {
             const selectedReminder = this.calendarGrid[week][day].reminders[reminder];
             this.selectedReminder = {
@@ -112,16 +126,40 @@ export class CalendarComponent {
 
     saveReminder(evt: any): void {
         const { text, city, time, color } = evt;
-        const [ week, day ] = this.selectedDate;
-        const reminder = { text, city, time, color };
+        this.blockUI.start(`Checking forecast for ${city}...`);
 
-        if (this.selectedReminder) {
-            this.calendarGrid[week][day].reminders[this.selectedReminder.index] = reminder;
-        } else {
-            this.calendarGrid[week][day].addReminder(reminder);
-        }
+        this._weatherService.getWeather(city)
+            .pipe(
+                take(1),
+                finalize(() => this.blockUI.stop()),
+                catchError(err => {
+                    alert('City does not exist');
+                    return throwError(err);
+                })
+            )
+            .subscribe((weather: string) => {
+                const [ week, day ] = this.selectedDate;
+                const date = this.calendarGrid[week][day];
+                const reminder: Reminder = new Reminder({ 
+                    color, 
+                    city, 
+                    date: new Date(date.year, date.month, date.date),
+                    text, 
+                    time, 
+                    weather
+                });
 
-        this.showAddReminder = false;
-        this.selectedReminder = null;
+                if (this.selectedReminder) {
+                    date.reminders[this.selectedReminder.index] = reminder;
+                } else {
+                    date.addReminder(reminder);
+                }
+
+                date.reminders = _.sortyBy(date.reminders, 'time').reverse();
+
+                this.showAddReminder = false;
+                this.selectedReminder = null;
+                this._cd.detectChanges();
+            });
     }
 }
