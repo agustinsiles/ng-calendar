@@ -1,41 +1,60 @@
-<form 
-    novalidate 
-    (ngSubmit)="onSubmit()" 
-    [formGroup]="reminderForm">
+<div class="reminders-manager-container">
+    <form 
+        novalidate 
+        (ngSubmit)="onSubmit()" 
+        [formGroup]="reminderForm">
 
-    Reminder: <input formControlName="text">
-    <div
-        class="error" 
-        *ngIf="reminderForm.get('text').touched">
-        <span *ngIf="reminderForm.get('text').hasError('required')">The text of the reminder is required.</span>
-        <span *ngIf="reminderForm.get('text').hasError('maxLength')">The value exeeds the maximum amount of characters (30).</span>
-    </div>
-  
-    Location: <input formControlName="city">
-    <div
-        class="error"
-        *ngIf="reminderForm.get('city').touched && reminderForm.get('city').hasError('required')">
-        The city is required
-    </div>
+        <div>
+            <label for="text">
+                Reminder: <input id="text" formControlName="text">
+                <span
+                    class="error" 
+                    *ngIf="reminderForm.get('text').touched">
+                    <span *ngIf="reminderForm.get('text').hasError('required')">The text of the reminder is required.</span>
+                    <span *ngIf="reminderForm.get('text').hasError('maxLength')">The value exeeds the maximum amount of characters (30).</span>
+                </span>
+            </label>
+        </div>
+    
+        <div>
+            <label for="city">
+                City: <input id="city" formControlName="city">
+                <span
+                    class="error"
+                    *ngIf="reminderForm.get('city').touched && reminderForm.get('city').hasError('required')">
+                    The city is required
+                </span>
+            </label>
+        </div>
 
-    Time: <input formControlName="time" type="time">
-    <div
-        class="error"
-        *ngIf="reminderForm.get('time').touched && reminderForm.get('time').hasError('required')">
-        The time is required
-    </div>
+        <div>
+            <label for="time">
+                Time: <input id="time" formControlName="time" type="time">
+                <span
+                    class="error"
+                    *ngIf="reminderForm.get('time').touched && reminderForm.get('time').hasError('required')">
+                    The time is required
+                </span>
+            </label>
+        </div>
 
-    Color:
-    <select 
-        formControlName="color" 
-        type="color">
-        <option value="red">Red</option> 
-        <option value="blue">Blue</option>
-        <option value="green">Green</option>
-    </select>
+        <div>
+            <label for="color">
+                Color:
+                <select 
+                    id="color"
+                    formControlName="color" 
+                    type="color">
+                    <option value="red">Red</option> 
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                </select>
+            </label>
+        </div>
 
-    <button 
-        type="submit" 
-        [disabled]="reminderForm.invalid">Add reminder
-    </button>
-</form>
+        <button 
+            type="submit" 
+            [disabled]="reminderForm.invalid">Save reminder
+        </button>
+    </form>
+</div>

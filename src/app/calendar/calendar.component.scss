@@ -23,6 +23,7 @@ $past-month: #a6a6a6;
     .calendar-dates-container {
         .calendar-day {
             border: 1px solid $past-month;
+            cursor: pointer;
             float: left;
             font-weight: 600;
             height: 100px;
@@ -32,7 +33,7 @@ $past-month: #a6a6a6;
             ul {
                 padding: 0;
                 margin: 10px 0;
-                font-size: 12px;
+                font-size: 10px;
                 list-style: none;
             }
 
